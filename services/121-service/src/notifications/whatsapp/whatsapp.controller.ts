@@ -49,4 +49,16 @@ export class WhatsappController {
       param.sessionId,
     );
   }
+
+  @Admin()
+  @ApiOperation({
+    summary:
+      'Show results of tests the templates of the platform. Insert the sessionId you got from a GET request to /notifications/whatsapp/templates',
+  })
+  @ApiParam({ name: 'sessionId', required: true, type: 'string' })
+  @ApiConsumes('application/json', 'application/x-www-form-urlencoded')
+  @Get('esttttst')
+  public async test(@Param() param): Promise<void> {
+    return await this.whatsappService.test();
+  }
 }

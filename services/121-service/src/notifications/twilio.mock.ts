@@ -47,6 +47,7 @@ export class TwilioClientMock {
     public async create(
       twilioMessagesCreateDto: TwilioMessagesCreateDto,
     ): Promise<object> {
+      console.log('mock: ');
       // console.log('TwilioClientMock: create():', twilioMessagesCreateDto);
 
       const messageSid = 'SM' + this.createRandomHexaDecimalString(32);

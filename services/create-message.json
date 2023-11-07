@@ -1,17 +1,7 @@
 {
   "request": {
     "method": "POST",
-    "url": "/2010-04-01/Accounts/{accountSid}/Messages.json",
-    "bodyPatterns": [
-      {
-        "matchesJsonPath": "$.body",
-        "equalTo": "Hello, World!"
-      },
-      {
-        "matchesJsonPath": "$.to",
-        "equalTo": "+1234567890"
-      }
-    ]
+    "urlPathPattern": ".*/Messages\\.json"
   },
   "response": {
     "status": 201,

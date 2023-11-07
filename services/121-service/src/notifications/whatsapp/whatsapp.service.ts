@@ -14,6 +14,7 @@ import { TwilioStatusCallbackDto } from '../twilio.dto';
 import { NotificationType, TwilioMessageEntity } from '../twilio.entity';
 import { WhatsappPendingMessageEntity } from './whatsapp-pending-message.entity';
 import { WhatsappTemplateTestEntity } from './whatsapp-template-test.entity';
+import { CustomHttpService } from '../../shared/services/custom-http.service';
 
 @Injectable()
 export class WhatsappService {
@@ -33,7 +34,29 @@ export class WhatsappService {
     String(ProgramNotificationEnum.whatsappGenericMessage),
   ];
 
-  constructor(private readonly lastMessageService: LastMessageStatusService) {}
+  constructor(
+    private readonly lastMessageService: LastMessageStatusService,
+    private readonly httpService: CustomHttpService,
+  ) {}
+
+  public async test(): Promise<void> {
+    console.log('test: ');
+    const recipientPhoneNr = 31655555555;
+    const payload = {
+      body: 'message',
+      messagingServiceSid: process.env.TWILIO_MESSAGING_SID,
+      from: 'whatsapp:' + process.env.TWILIO_WHATSAPP_NUMBER,
+      statusCallback: EXTERNAL_API.whatsAppStatus,
+      to: `whatsapp:${'+'}${recipientPhoneNr}`,
+    };
+    // const r = await twilioClient.messages.create(payload);
+
+    const r = await this.httpService.post(
+      'http://wiremock:8080/2010-04-01/Accounts/AC18fa67e273d99f7850aeabfd75805819/Messages.json',
+      payload,
+    );
+    console.log('r: ', r);
+  }
 
   public async sendWhatsapp(
     message: string,
@@ -53,6 +76,7 @@ export class WhatsappService {
       statusCallback: EXTERNAL_API.whatsAppStatus,
       to: `whatsapp:${hasPlus ? '' : '+'}${recipientPhoneNr}`,
     };
+    console.log('payload.messagingServiceSid: ', payload.messagingServiceSid);
     if (mediaUrl) {
       payload['mediaUrl'] = mediaUrl;
     }
@@ -62,6 +86,7 @@ export class WhatsappService {
     return twilioClient.messages
       .create(payload)
       .then(async (message) => {
+        console.log('message: ', message);
         await this.storeSendWhatsapp(
           message,
           registrationId,
@@ -166,6 +191,8 @@ export class WhatsappService {
         },
       );
     } else {
+      console.log('message.messagingServiceSid: ', message.messagingServiceSid);
+
       const twilioMessage = new TwilioMessageEntity();
       twilioMessage.accountSid = message.accountSid;
       twilioMessage.body = message.body;

@@ -20,9 +20,12 @@ import { WhatsappPendingMessageEntity } from './whatsapp-pending-message.entity'
 import { WhatsappTemplateTestEntity } from './whatsapp-template-test.entity';
 import { WhatsappController } from './whatsapp.controller';
 import { WhatsappService } from './whatsapp.service';
+import { CustomHttpService } from '../../shared/services/custom-http.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     TypeOrmModule.forFeature([
       TwilioMessageEntity,
       TransactionEntity,
@@ -37,7 +40,12 @@ import { WhatsappService } from './whatsapp.service';
     ImageCodeModule,
     UserModule,
   ],
-  providers: [WhatsappService, SmsService, LastMessageStatusService],
+  providers: [
+    WhatsappService,
+    SmsService,
+    LastMessageStatusService,
+    CustomHttpService,
+  ],
   controllers: [WhatsappController],
   exports: [WhatsappService],
 })

@@ -1,0 +1,24 @@
+{
+  "messagingServiceSid": "MGc7e0c40dae68bcf585f37b835dc74dd4",
+  "sid": "SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "date_created": "Mon, 08 Aug 2011 20:01:40 +0000",
+  "date_updated": "Mon, 08 Aug 2011 20:01:40 +0000",
+  "date_sent": null,
+  "account_sid": "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "to": "+1234567890",
+  "from": "+14158141829",
+  "body": "Hello, World!",
+  "status": "queued",
+  "num_segments": "1",
+  "num_media": "0",
+  "direction": "outbound-api",
+  "api_version": "2010-04-01",
+  "price": null,
+  "price_unit": "USD",
+  "error_code": null,
+  "error_message": null,
+  "uri": "/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.json",
+  "subresource_uris": {
+    "media": "/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Media.json"
+  }
+}

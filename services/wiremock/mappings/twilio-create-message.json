@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": ".*/Messages\\.json"
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "body.json"
+  }
+}
