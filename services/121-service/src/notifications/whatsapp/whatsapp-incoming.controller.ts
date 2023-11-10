@@ -23,7 +23,7 @@ export class WhatsappIncomingController {
   @ApiConsumes('application/json', 'application/x-www-form-urlencoded')
   @Post('status')
   public async statusCallback(
-    @Body() callbackData: TwilioStatusCallbackDto,
+    @Body() callbackData: any, //TwilioStatusCallbackDto,
   ): Promise<void> {
     return await this.whatsappIncomingService.statusCallback(callbackData);
   }
@@ -38,6 +38,7 @@ export class WhatsappIncomingController {
   public async incoming(
     @Body() callbackData: TwilioIncomingCallbackDto,
   ): Promise<void> {
+    console.log('callbackData: ', callbackData);
     return await this.whatsappIncomingService.handleIncoming(callbackData);
   }
 }

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "urlPattern": "/v1/PhoneNumbers/(.*)",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "lookup-body.json",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": ["response-template"]
+  }
+}

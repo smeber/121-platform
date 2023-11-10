@@ -1,0 +1,11 @@
+{
+  "SmsSid": "{{jsonPath request.body '$.tatusCallback'}}",
+  "SmsStatus": "sent",
+  "MessageStatus": "sent",
+  "To": "+12345678901",
+  "From": "+09876543210",
+  "MessageSid": "SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "AccountSid": "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "ErrorCode": null,
+  "ErrorMessage": null
+}

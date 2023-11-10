@@ -1,10 +1,75 @@
-{
-  "request": {
-    "method": "POST",
-    "urlPathPattern": ".*/Messages\\.json"
-  },
-  "response": {
-    "status": 201,
-    "bodyFileName": "body.json"
+[
+  {
+    "request": {
+      "method": "POST",
+      "urlPathPattern": ".*/Messages\\.json"
+    },
+    "response": {
+      "status": 201,
+      "bodyFileName": "create-message-body.json",
+      "transformers": ["response-template"]
+    },
+    "serveEventListeners": [
+      {
+        "name": "webhook",
+        "parameters": {
+          "method": "POST",
+          "url": "http://121-service:3000/api/notifications/whatsapp/status",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": "{ \"SmsSid\": \"{{originalRequest.headers.X-Random-UUID}}\", \"SmsStatus\": \"sent\", \"MessageStatus\": \"sent\", \"To\": \"+12345678901\", \"From\": \"+09876543210\", \"MessageSid\": \"{{originalRequest.headers.X-Random-UUID}}\", \"AccountSid\": \"ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\", \"ErrorCode\": null, \"ErrorMessage\": null }",
+          "delay": {
+            "type": "fixed",
+            "milliseconds": 300
+          }
+        }
+      },
+      {
+        "name": "webhook",
+        "parameters": {
+          "method": "POST",
+          "url": "http://121-service:3000/api/notifications/whatsapp/status",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": "{ \"SmsSid\": \"{{originalRequest.headers.X-Random-UUID}}\", \"SmsStatus\": \"sent\", \"MessageStatus\": \"sent\", \"To\": \"+12345678901\", \"From\": \"+09876543210\", \"MessageSid\": \"{{originalRequest.headers.X-Random-UUID}}\", \"AccountSid\": \"ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\", \"ErrorCode\": null, \"ErrorMessage\": null }",
+          "delay": {
+            "type": "fixed",
+            "milliseconds": 600
+          }
+        }
+      },
+      {
+        "name": "webhook",
+        "parameters": {
+          "method": "POST",
+          "url": "http://121-service:3000/api/notifications/whatsapp/status",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": "{ \"SmsSid\": \"{{originalRequest.headers.X-Random-UUID}}\", \"SmsStatus\": \"read\", \"MessageStatus\": \"read\", \"To\": \"+12345678901\", \"From\": \"+09876543210\", \"MessageSid\": \"{{originalRequest.headers.X-Random-UUID}}\", \"AccountSid\": \"ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\", \"ErrorCode\": null, \"ErrorMessage\": null }",
+          "delay": {
+            "type": "fixed",
+            "milliseconds": 900
+          }
+        }
+      },
+      {
+        "name": "webhook",
+        "parameters": {
+          "method": "POST",
+          "url": "http://121-service:3000/api/notifications/whatsapp/incoming",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": "{ \"MessageSid\": \"doesnotmatter\", \"From\": \"whatsapp:+31600000000\", \"WaId\": \"31600000000\", \"To\": \"whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}\", \"Body\": \"Yes\" }",
+          "delay": {
+            "type": "fixed",
+            "milliseconds": 1000
+          }
+        }
+      }
+    ]
   }
-}
+]

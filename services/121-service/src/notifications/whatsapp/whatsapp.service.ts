@@ -46,7 +46,9 @@ export class WhatsappService {
       body: 'message',
       messagingServiceSid: process.env.TWILIO_MESSAGING_SID,
       from: 'whatsapp:' + process.env.TWILIO_WHATSAPP_NUMBER,
-      statusCallback: EXTERNAL_API.whatsAppStatus,
+      statusCallback: !process.env.MOCK_TWILIO
+        ? EXTERNAL_API.whatsAppStatus
+        : uuid(),
       to: `whatsapp:${'+'}${recipientPhoneNr}`,
     };
     // const r = await twilioClient.messages.create(payload);
@@ -73,49 +75,49 @@ export class WhatsappService {
       body: message,
       messagingServiceSid: process.env.TWILIO_MESSAGING_SID,
       from: 'whatsapp:' + process.env.TWILIO_WHATSAPP_NUMBER,
-      statusCallback: EXTERNAL_API.whatsAppStatus,
+      statusCallback: !process.env.MOCK_TWILIO
+        ? EXTERNAL_API.whatsAppStatus
+        : uuid(),
       to: `whatsapp:${hasPlus ? '' : '+'}${recipientPhoneNr}`,
     };
-    console.log('payload.messagingServiceSid: ', payload.messagingServiceSid);
+    console.log('payload: ', payload);
     if (mediaUrl) {
       payload['mediaUrl'] = mediaUrl;
     }
     if (!!process.env.MOCK_TWILIO) {
       payload['messageType'] = messageType;
     }
-    return twilioClient.messages
-      .create(payload)
-      .then(async (message) => {
-        console.log('message: ', message);
-        await this.storeSendWhatsapp(
-          message,
-          registrationId,
-          mediaUrl,
-          messageContentType,
-          existingSidToUpdate,
-        );
-        return message.sid;
-      })
-      .catch(async (err) => {
-        console.log('Error from Twilio:', err);
-        const failedMessage = {
-          accountSid: process.env.TWILIO_SID,
-          body: payload.body,
-          mediaUrl: mediaUrl,
-          to: payload.to,
-          messagingServiceSid: process.env.TWILIO_MESSAGING_SID,
-          dateCreated: new Date().toISOString(),
-          sid: `failed-${uuid()}`,
-          status: 'failed',
-          errorCode: err.code,
-        };
-        await this.storeSendWhatsapp(
-          failedMessage,
-          registrationId,
-          mediaUrl,
-          messageContentType,
-        );
-      });
+    return twilioClient.messages.create(payload).then(async (message) => {
+      console.log('message: ', message);
+      await this.storeSendWhatsapp(
+        message,
+        registrationId,
+        mediaUrl,
+        messageContentType,
+        existingSidToUpdate,
+      );
+      return message.sid;
+    });
+    // .catch(async (err) => {
+    //   console.log('Error from Twilio:', err);
+    //   const failedMessage = {
+    //     accountSid: process.env.TWILIO_SID,
+    //     body: payload.body,
+    //     mediaUrl: mediaUrl,
+    //     to: payload.to,
+    //     messagingServiceSid: process.env.TWILIO_MESSAGING_SID,
+    //     dateCreated: new Date().toISOString(),
+    //     sid: `failed-${uuid()}`,
+    //     status: 'failed',
+    //     errorCode: err.code,
+    //   };
+    //   await this.storeSendWhatsapp(
+    //     failedMessage,
+    //     registrationId,
+    //     mediaUrl,
+    //     messageContentType,
+    //   );
+    // });
   }
 
   public async queueMessageSendTemplate(

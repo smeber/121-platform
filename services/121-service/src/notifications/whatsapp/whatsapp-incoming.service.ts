@@ -89,6 +89,7 @@ export class WhatsappIncomingService {
   public async statusCallback(
     callbackData: TwilioStatusCallbackDto,
   ): Promise<void> {
+    console.log('callbackData: ', callbackData);
     if (
       callbackData.MessageStatus === TwilioStatus.delivered ||
       callbackData.MessageStatus === TwilioStatus.failed
