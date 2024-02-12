@@ -1,0 +1,79 @@
+<ion-item
+  [lines]="lines"
+  style="
+    font-size: 14px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+  "
+>
+  <ion-grid>
+    <ion-row>
+      <div class="ion-padding-horizontal">
+        <div style="height: 100%; display: flex">
+          <ion-icon
+            class="money-icon ion-no-padding"
+            name="mail-outline"
+            size="large"
+            [attr.aria-hidden]="true"
+          ></ion-icon>
+        </div>
+      </div>
+      <ion-col>
+        <ion-row class="ion-justify-content-between">
+          <ion-row>
+            <ion-label class="ion-margin-end">
+              <strong
+                >{{
+                  'page.program.program-people-affected.message-history-popup.content-type.' +
+                    message.contentType | translate
+                }}<span *ngIf="message.type"> - </span>
+                {{
+                  'page.program.program-people-affected.message-history-popup.type.' +
+                    message.type | translate
+                }}</strong
+              >
+            </ion-label>
+            <ion-chip
+              [ngClass]="'chip-' + chipMessageStatusMapping[message.status]"
+              >{{
+                'page.program.program-people-affected.message-history-popup.chip-status.' +
+                  chipMessageStatusMapping[message.status] | translate
+              }}</ion-chip
+            >
+          </ion-row>
+        </ion-row>
+        <ion-row>
+          <div>
+            <ion-note>
+              <small>
+                {{
+                  message.created | date: DateFormat.dayAndTimeReverse : locale
+                }}
+              </small>
+            </ion-note>
+          </div>
+        </ion-row>
+        <ion-row *ngIf="message.errorCode">
+          <ion-note>
+            {{
+              'page.program.program-people-affected.message-history-popup.status-line.code'
+                | translate
+            }}<a
+              [href]="errorCodeUrl + message.errorCode"
+              target="_blank"
+              rel="external noopener noreferrer"
+              >{{ message.errorCode }}</a
+            ></ion-note
+          >
+        </ion-row>
+        <div>
+          <ion-text
+            class="activity-overview--item--description"
+            [innerHTML]="message.body"
+          ></ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-item>

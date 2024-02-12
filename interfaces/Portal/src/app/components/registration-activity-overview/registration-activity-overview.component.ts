@@ -7,6 +7,7 @@ import { PaymentData, PaymentRowDetail } from 'src/app/models/payment.model';
 import { Program } from 'src/app/models/program.model';
 import { StatusEnum } from 'src/app/models/status.enum';
 import { Transaction } from 'src/app/models/transaction.model';
+import { MessageHistoryItemComponent } from 'src/app/program/message-history-item/message-history-item.component';
 import { PaymentHistoryAccordionComponent } from 'src/app/program/payment-history-accordion/payment-history-accordion.component';
 import { PastPaymentsService } from 'src/app/services/past-payments.service';
 import { PaymentUtils } from 'src/app/shared/payment.utils';
@@ -14,6 +15,7 @@ import { AuthService } from '../../auth/auth.service';
 import Permission from '../../auth/permission.enum';
 import { Attribute } from '../../models/attribute.model';
 import { AnswerType } from '../../models/fsp.model';
+import { Message, MessageStatusMapping } from '../../models/message.model';
 import { Person } from '../../models/person.model';
 import { RegistrationStatusChange } from '../../models/registration-status-change.model';
 import { EnumService } from '../../services/enum.service';
@@ -34,6 +36,9 @@ class ActivityOverviewItem {
   hasWaiting?: boolean;
   chipText?: string;
   subLabel?: string;
+  status?: string;
+  // TODO: REFACTOR: combine paymentRowDetail and messageSource? A generic place to put the original data in items.
+  messageSource?: Message;
 }
 
 enum ActivityOverviewType {
@@ -52,6 +57,7 @@ enum ActivityOverviewType {
     TranslateModule,
     PaymentHistoryAccordionComponent,
     AddNotePopupComponent,
+    MessageHistoryItemComponent,
   ],
   selector: 'app-registration-activity-overview',
   templateUrl: './registration-activity-overview.component.html',
@@ -83,6 +89,7 @@ export class RegistrationActivityOverviewComponent implements OnInit {
     ActivityOverviewType.status,
   ];
   public canUpdatePersonalData: boolean;
+  public chipStatus = MessageStatusMapping;
 
   private canViewRegistration: boolean;
   private canViewPersonalData: boolean;
@@ -269,6 +276,8 @@ export class RegistrationActivityOverviewComponent implements OnInit {
           ),
           date: new Date(message.created),
           description: message.body,
+          status: message.status,
+          messageSource: message,
         });
       }
     }

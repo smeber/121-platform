@@ -90,7 +90,7 @@
       >
         <ion-grid>
           <!-- Other tabs -->
-          <ion-row *ngIf="item.type !== 'payment'">
+          <ion-row *ngIf="item.type !== 'payment' && item.type !== 'message'">
             <div class="ion-padding-horizontal">
               <div style="height: 100%; display: flex; align-items: center">
                 <ion-icon
@@ -125,6 +125,18 @@
                   [innerHTML]="item.description"
                 ></ion-text>
               </div>
+              <div>
+                <!-- messages-->
+                <ion-chip
+                  *ngIf="item.type === 'message'"
+                  class="ion-justify-content-center"
+                  [ngClass]="'chip-' + chipStatus[item.status]"
+                  >{{
+                    'page.program.program-people-affected.message-history-popup.chip-status.' +
+                      chipStatus[item.status] | translate
+                  }}</ion-chip
+                >
+              </div>
             </ion-col>
 
             <ion-label
@@ -158,6 +170,16 @@
                 [lastPaymentId]="lastPaymentId"
               ></app-payment-history-accordion>
             </ion-accordion-group>
+          </div>
+
+          <!-- messages -->
+          <div
+            *ngIf="item.type === 'message'"
+            style="width: 100%"
+          >
+            <app-message-history-item
+              [message]="item.messageSource"
+            ></app-message-history-item>
           </div>
         </ion-grid>
       </ion-item>

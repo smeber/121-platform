@@ -1,15 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { DateFormat } from 'src/app/enums/date-format.enum';
-import { environment } from '../../../environments/environment';
-import { Message, MessageStatusMapping } from '../../models/message.model';
-import { Person } from '../../models/person.model';
-import { ProgramsServiceApiService } from '../../services/programs-service-api.service';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
+import { Person } from 'src/app/models/person.model';
+import { ProgramsServiceApiService } from 'src/app/services/programs-service-api.service';
+import { Message } from '../../models/message.model';
+import { MessageHistoryItemComponent } from '../message-history-item/message-history-item.component';
 
 @Component({
   selector: 'app-message-history-popup',
   templateUrl: './message-history-popup.component.html',
   styleUrls: ['./message-history-popup.component.scss'],
+  standalone: true,
+  imports: [
+    IonicModule,
+    CommonModule,
+    TranslateModule,
+    MessageHistoryItemComponent,
+  ],
 })
 export class MessageHistoryPopupComponent implements OnInit {
   @Input()
@@ -19,18 +27,11 @@ export class MessageHistoryPopupComponent implements OnInit {
   public programId: number;
 
   public person: Person;
-  public DateFormat = DateFormat;
   public messageHistory: Message[];
-  public historySize = 5;
-  public trimBodyLength = 20;
-  public imageString = '(image)';
-  public rowIndex: number;
-  public chipStatus = MessageStatusMapping;
-  public errorCodeUrl = `${environment.twilio_error_codes_url}/`;
 
   constructor(
-    private programsService: ProgramsServiceApiService,
     private modalController: ModalController,
+    private programsService: ProgramsServiceApiService,
   ) {}
 
   async ngOnInit() {
@@ -47,21 +48,12 @@ export class MessageHistoryPopupComponent implements OnInit {
     );
     this.person = res.data[0];
   }
+
   private async getMessageHistory() {
     this.messageHistory = await this.programsService.retrieveMsgHistory(
       this.programId,
       this.referenceId,
     );
-  }
-  public async loadMore(historyLength) {
-    this.historySize = historyLength;
-  }
-  public openMessageDetails(index) {
-    if (index === this.rowIndex) {
-      this.rowIndex = null;
-    } else {
-      this.rowIndex = index;
-    }
   }
 
   public closeModal() {

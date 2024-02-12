@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title
+      color="secondary"
+      style="font-weight: 600"
+    >
+      {{
+        'page.program.program-people-affected.message-history-popup.message-title'
+          | translate
+          | uppercase
+      }}
+      - {{ person?.personAffectedSequence }} - {{ person?.name }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="closeModal()"
+        [attr.title]="'common.cancel' | translate"
+        [attr.aria-label]="'common.cancel' | translate"
+      >
+        <ion-icon
+          name="close"
+          slot="icon-only"
+          aria-hidden="true"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <div
+      *ngFor="let message of messageHistory; let i = index"
+      class="ion-margin-bottom ion-padding-horizontal"
+    >
+      <app-message-history-item
+        [message]="message"
+        lines="full"
+      ></app-message-history-item>
+    </div>
+  </ion-list>
+</ion-content>
